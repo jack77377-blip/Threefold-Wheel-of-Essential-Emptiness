@@ -1,0 +1,9 @@
+{
+  "name": "日常三輪體空 242 實踐",
+  "short_name": "242實踐",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#faf7f2",
+  "theme_color": "#7c3aed",
+  "icons": [{"src":"assets/icon.svg","sizes":"512x512","type":"image/svg+xml"}]
+}

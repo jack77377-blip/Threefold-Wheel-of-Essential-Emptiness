@@ -1,155 +1,134 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#7c3aed" />
+  <meta name="description" content="日常三輪體空 242 實踐互動網站" />
   <title>日常三輪體空 242 實踐</title>
-  <meta name="description" content="日常三輪體空 242 實踐表單，可產生實踐紀錄卡並下載分享。" />
-  <meta property="og:title" content="日常三輪體空 242 實踐" />
-  <meta property="og:description" content="種下一顆解決問題的超級好種子。" />
-  <meta property="og:type" content="website" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icon.svg" />
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script type="module" defer src="firebase-config.js"></script>
+  <script type="module" defer src="script.js"></script>
 </head>
 <body>
-  <main id="app">
-    <section id="formView" class="page active">
-      <header class="hero">
-        <div class="container hero-inner">
-          <h1>✨ 日常三輪體空 242 實踐 ✨</h1>
-          <p class="subtitle">種下一顆「解決問題」的超級好種子 🌱</p>
+  <noscript>本網站需要啟用 JavaScript 才能使用。</noscript>
 
-          <div class="theme-card">
-            <label for="theme">今日實踐主題</label>
-            <div class="theme-row">
-              <input id="theme" name="theme" type="text" placeholder="例如：衛生紙、微笑、健康茶飲" />
-              <button id="aiBtn" class="btn primary" type="button">🪄 AI 幫我寫</button>
-            </div>
-            <div class="api-row">
-              <input id="apiKey" type="password" placeholder="選填：輸入 Gemini API Key，僅存在你的瀏覽器" />
-              <button id="saveApiBtn" class="btn light" type="button">儲存金鑰</button>
-            </div>
-            <p class="hint">公開網站不建議把 API Key 寫進程式碼；這裡改成使用者自行輸入，比較安全。</p>
-          </div>
+  <header class="hero">
+    <div class="hero__inner">
+      <div class="brand-row"><span class="spark">✨</span><h1>日常三輪體空 242 實踐</h1><span class="spark">✨</span></div>
+      <p>種下一顆「解決問題」的超級好種子 🌱</p>
+      <div class="status-row">
+        <span id="install-status">PWA 可安裝</span>
+        <span id="cloud-status">AI 後端：待設定</span>
+        <span id="user-count">使用人數：統計中</span>
+      </div>
+    </div>
+  </header>
 
-          <button id="exampleBtn" class="link-btn" type="button">載入「衛生紙」手動範例</button>
+  <main class="container">
+    <section id="setup-warning" class="notice hidden">
+      <strong>部署提醒：</strong>請先完成 <code>worker/worker.js</code> 的 Cloudflare Workers 部署，並把網址填入 <code>firebase-config.js</code> 的 <code>WORKER_ENDPOINT</code>。
+    </section>
+
+    <section id="form-view" class="view active">
+      <section class="card theme-card">
+        <label for="theme">今日實踐主題</label>
+        <div class="theme-input-row">
+          <input id="theme" name="theme" type="text" placeholder="例如：衛生紙、微笑、健康茶飲" autocomplete="off" />
+          <button id="ai-write-btn" class="btn primary">✨ AI 幫我寫</button>
         </div>
-      </header>
-
-      <div class="container form-wrap">
-        <section class="panel orange">
-          <h2>📖 情境導入</h2>
-          <label>1. 遇到什麼問題或情境？</label>
-          <textarea name="scenarioProblem" placeholder="例如：遇到某個不便、匱乏或需求……"></textarea>
-          <label>2. 你的轉念與實際行動？</label>
-          <textarea name="scenarioAction" placeholder="例如：我如何透過這個主題採取善意行動……"></textarea>
-          <label>3. 對此行動的溫暖期許</label>
-          <textarea name="scenarioWish" placeholder="例如：願這份行動幫助到需要的人……"></textarea>
-        </section>
-
-        <section class="panel purple">
-          <h2><span>1</span> 給予者的空性</h2>
-          <label>1-1 我的空性：清空匱乏</label>
-          <textarea name="step1_1"></textarea>
-          <label>1-2 擴大目標：連結世界</label>
-          <textarea name="step1_2"></textarea>
-        </section>
-
-        <section class="panel pink">
-          <h2><span>2</span> 給予的空性</h2>
-          <label>2-1 給予物的空性：回溯來源</label>
-          <textarea name="step2_1"></textarea>
-          <label>2-2 接收者身分：極致感恩</label>
-          <textarea name="step2_2"></textarea>
-          <label>2-3 給予者空性：匯聚力量</label>
-          <textarea name="step2_3"></textarea>
-          <label>2-4 接受者空性：讓愛擴散</label>
-          <textarea name="step2_4"></textarea>
-        </section>
-
-        <section class="panel indigo">
-          <h2><span>3</span> 接受者的空性</h2>
-          <label>3-1 發射給自己：精準鎖定</label>
-          <textarea name="step3_1"></textarea>
-          <label>3-2 發射給同伴：共享喜悅</label>
-          <textarea name="step3_2"></textarea>
-        </section>
-
-        <div class="center">
-          <button id="submitBtn" class="btn big" type="button">完成今日實踐 ✅</button>
+        <div class="quick-row">
+          <button id="example-btn" class="link-btn">載入「衛生紙」手動範例</button>
+          <button id="clear-btn" class="link-btn danger">清除草稿</button>
         </div>
+      </section>
+
+      <section class="card orange">
+        <h2>📖 情境導入</h2>
+        <label>1. 遇到什麼問題或情境？</label>
+        <textarea name="scenarioProblem" placeholder="請描述當下情境，或由 AI 產生"></textarea>
+        <label>2. 你的轉念與實際行動？</label>
+        <textarea name="scenarioAction" placeholder="請描述你採取的行動"></textarea>
+        <label>3. 對此行動的溫暖期許</label>
+        <textarea name="scenarioWish" placeholder="希望這份行動帶來什麼祝福？"></textarea>
+      </section>
+
+      <section class="card purple">
+        <h2><span class="num">1</span> 給予者的空性</h2>
+        <label>1-1 我的空性：清空匱乏</label>
+        <textarea name="step1_1"></textarea>
+        <label>1-2 擴大目標：連結世界</label>
+        <textarea name="step1_2"></textarea>
+      </section>
+
+      <section class="card pink">
+        <h2><span class="num">2</span> 給予的空性</h2>
+        <label>2-1 給予物的空性：回溯來源</label>
+        <textarea name="step2_1"></textarea>
+        <label>2-2 接收者身分：極致感恩</label>
+        <textarea name="step2_2"></textarea>
+        <label>2-3 給予者空性：匯聚力量</label>
+        <textarea name="step2_3"></textarea>
+        <label>2-4 接受者空性：讓愛擴散</label>
+        <textarea name="step2_4"></textarea>
+      </section>
+
+      <section class="card indigo">
+        <h2><span class="num">3</span> 接受者的空性</h2>
+        <label>3-1 發射給自己：精準鎖定</label>
+        <textarea name="step3_1"></textarea>
+        <label>3-2 發射給同伴：共享喜悅</label>
+        <textarea name="step3_2"></textarea>
+      </section>
+
+      <div class="center actions-sticky">
+        <button id="submit-btn" class="btn big primary">完成今日實踐 ✅</button>
       </div>
     </section>
 
-    <section id="summaryView" class="page">
-      <div class="summary-shell">
-        <article id="practice-card" class="practice-card">
-          <div class="decoration sparkle">✨</div>
-          <div class="decoration heart">♡</div>
-
-          <div class="card-head">
-            <p id="dateText" class="date"></p>
-            <h1><span id="cardTheme">主題</span> 的奇蹟實踐</h1>
-            <p class="tag">日常三輪體空 242</p>
-          </div>
-
-          <section class="summary-box action-box">
-            <h3>☀️ 情境與行動</h3>
-            <p><b>問題：</b><span data-out="scenarioProblem"></span></p>
-            <p><b>行動：</b><span data-out="scenarioAction"></span></p>
-            <p><b>期許：</b><span data-out="scenarioWish"></span></p>
-          </section>
-
-          <div class="summary-grid">
-            <section class="mini purple-mini">
-              <h3>1 給予者空性</h3>
-              <h4>1-1 我的空性</h4><p data-out="step1_1"></p>
-              <h4>1-2 擴大目標</h4><p data-out="step1_2"></p>
-            </section>
-            <section class="mini pink-mini">
-              <h3>2 給予的空性</h3>
-              <h4>2-1 給予物空性</h4><p data-out="step2_1"></p>
-              <h4>2-2 接收者身分</h4><p data-out="step2_2"></p>
-              <h4>2-3 匯聚力量</h4><p data-out="step2_3"></p>
-              <h4>2-4 讓愛擴散</h4><p data-out="step2_4"></p>
-            </section>
-            <section class="mini indigo-mini">
-              <h3>3 接受者空性</h3>
-              <h4>3-1 發射給自己</h4><p data-out="step3_1"></p>
-              <h4>3-2 發射給同伴</h4><p data-out="step3_2"></p>
-            </section>
-          </div>
-
-          <section class="blessing">
-            <div>🌱</div>
-            <p>願這顆超級好種子，在你我與世界的中心發芽、開花。<br><strong>人人都能互相拉一把，世界因愛而圓滿！ ❤️</strong></p>
-          </section>
-        </article>
-
-        <div class="control-row">
-          <button id="imageBtn" class="btn success" type="button">產生圖片分享</button>
-          <button id="backBtn" class="btn white" type="button">返回修改</button>
-          <button id="resetBtn" class="btn white" type="button">重新填寫</button>
+    <section id="summary-view" class="view">
+      <article id="practice-card" class="practice-card">
+        <p id="today" class="date"></p>
+        <h2><span id="summary-theme">主題</span> 的奇蹟實踐</h2>
+        <p class="pill">日常三輪體空 242</p>
+        <div class="summary-block">
+          <h3>☀️ 情境與行動</h3>
+          <p><small>問題：</small><span data-out="scenarioProblem"></span></p>
+          <p><small>行動：</small><span data-out="scenarioAction"></span></p>
+          <p><small>期許：</small><span data-out="scenarioWish"></span></p>
         </div>
+        <div class="summary-grid">
+          <div><h3>1 給予者空性</h3><p><b>1-1 我的空性</b><span data-out="step1_1"></span></p><p><b>1-2 擴大目標</b><span data-out="step1_2"></span></p></div>
+          <div><h3>2 給予的空性</h3><p><b>2-1 給予物空性</b><span data-out="step2_1"></span></p><p><b>2-2 接收者身分</b><span data-out="step2_2"></span></p><p><b>2-3 匯聚力量</b><span data-out="step2_3"></span></p><p><b>2-4 讓愛擴散</b><span data-out="step2_4"></span></p></div>
+          <div><h3>3 接受者空性</h3><p><b>3-1 發射給自己</b><span data-out="step3_1"></span></p><p><b>3-2 發射給同伴</b><span data-out="step3_2"></span></p></div>
+        </div>
+        <footer>🌱 願這顆超級好種子，在你我與世界的中心發芽、開花。<br><strong>人人都能互相拉一把，世界因愛而圓滿！</strong></footer>
+      </article>
+
+      <div id="ai-image-panel" class="card image-panel hidden">
+        <h2>AI 圖片生成</h2>
+        <p>依照今日主題產生一張祝福感、溫暖風格圖片。</p>
+        <button id="ai-image-btn" class="btn secondary">產生 AI 圖片</button>
+        <div id="ai-image-result"></div>
+      </div>
+
+      <div class="center button-wrap">
+        <button id="capture-btn" class="btn success">產生圖片分享</button>
+        <button id="share-text-btn" class="btn secondary">分享文字</button>
+        <button id="back-btn" class="btn ghost">返回修改</button>
+        <button id="new-btn" class="btn ghost">新增一筆</button>
       </div>
     </section>
   </main>
 
-  <div id="modal" class="modal" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-head">
-        <h2>✨ 圖片已準備好！</h2>
-        <button id="closeModal" type="button">✕</button>
-      </div>
-      <div class="image-preview"><img id="previewImg" alt="三輪體空實踐日記圖片"></div>
-      <div class="modal-actions">
-        <button id="downloadBtn" class="btn primary" type="button">下載圖片</button>
-        <button id="shareBtn" class="btn success" type="button">直接分享</button>
-      </div>
-      <p class="hint center-text">若按鈕無反應，也可以對圖片長按或按右鍵儲存。</p>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+  <dialog id="image-dialog">
+    <div class="dialog-head"><strong>圖片已準備好</strong><button id="close-dialog">×</button></div>
+    <img id="generated-image" alt="三輪體空實踐日記圖片" />
+    <div class="button-wrap"><button id="download-image" class="btn primary">下載圖片</button><button id="share-image" class="btn success">直接分享</button></div>
+    <p class="hint">若按鈕無反應，可長按圖片或按右鍵儲存。</p>
+  </dialog>
 </body>
 </html>
