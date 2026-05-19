@@ -1,91 +1,155 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>教學網站</title>
-  <meta name="description" content="由 Gemini 分享內容整理而成的教學網站，可直接部署到 GitHub Pages。" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>日常三輪體空 242 實踐</title>
+  <meta name="description" content="日常三輪體空 242 實踐表單，可產生實踐紀錄卡並下載分享。" />
+  <meta property="og:title" content="日常三輪體空 242 實踐" />
+  <meta property="og:description" content="種下一顆解決問題的超級好種子。" />
+  <meta property="og:type" content="website" />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 </head>
 <body>
-  <header class="hero">
-    <nav class="nav">
-      <div class="brand">教學網站</div>
-      <a class="btn small" href="#content">開始閱讀</a>
-    </nav>
-    <section class="hero-inner">
-      <p class="eyebrow">GitHub Pages Ready</p>
-      <h1>Gemini 分享內容教學網站</h1>
-      <p class="lead">這是一份可直接上傳到 GitHub Pages 的清爽簡約版網站。請將 Gemini 分享頁面的內容貼到下方「主要內容」區塊，即可正式發布。</p>
-      <div class="actions">
-        <a class="btn" href="#content">查看內容</a>
-        <a class="btn ghost" href="#deploy">部署教學</a>
-      </div>
-    </section>
-  </header>
+  <main id="app">
+    <section id="formView" class="page active">
+      <header class="hero">
+        <div class="container hero-inner">
+          <h1>✨ 日常三輪體空 242 實踐 ✨</h1>
+          <p class="subtitle">種下一顆「解決問題」的超級好種子 🌱</p>
 
-  <main>
-    <section class="notice">
-      <h2>讀取狀態</h2>
-      <p>目前 Gemini 分享連結只回傳登入頁面，無法直接擷取原文內容。因此我先製作完整網站架構與 GitHub Pages 部署檔案。你只要把 Gemini 內容複製後貼入 <code>index.html</code> 的主要內容區即可。</p>
-    </section>
+          <div class="theme-card">
+            <label for="theme">今日實踐主題</label>
+            <div class="theme-row">
+              <input id="theme" name="theme" type="text" placeholder="例如：衛生紙、微笑、健康茶飲" />
+              <button id="aiBtn" class="btn primary" type="button">🪄 AI 幫我寫</button>
+            </div>
+            <div class="api-row">
+              <input id="apiKey" type="password" placeholder="選填：輸入 Gemini API Key，僅存在你的瀏覽器" />
+              <button id="saveApiBtn" class="btn light" type="button">儲存金鑰</button>
+            </div>
+            <p class="hint">公開網站不建議把 API Key 寫進程式碼；這裡改成使用者自行輸入，比較安全。</p>
+          </div>
 
-    <section id="content" class="section">
-      <div class="section-head">
-        <p class="eyebrow">Main Content</p>
-        <h2>主要內容</h2>
-      </div>
-
-      <article class="card article">
-        <h3>請在這裡貼上 Gemini 內容標題</h3>
-        <p>請將 Gemini 分享頁面的文字內容貼到這裡。建議依照「標題、重點摘要、步驟說明、補充提醒」分段，閱讀起來會很順。</p>
-
-        <h4>一、重點摘要</h4>
-        <ul>
-          <li>請貼上第一個重點。</li>
-          <li>請貼上第二個重點。</li>
-          <li>請貼上第三個重點。</li>
-        </ul>
-
-        <h4>二、詳細說明</h4>
-        <p>請貼上完整說明文字。若內容較長，可以拆成多個小標題，像收納盒一樣分類，找資料才不會像在抽屜裡撈耳機線。</p>
-
-        <h4>三、操作步驟</h4>
-        <ol>
-          <li>步驟一：請填入操作內容。</li>
-          <li>步驟二：請填入操作內容。</li>
-          <li>步驟三：請填入操作內容。</li>
-        </ol>
-      </article>
-    </section>
-
-    <section id="deploy" class="section alt">
-      <div class="section-head">
-        <p class="eyebrow">Deploy</p>
-        <h2>GitHub Pages 上架方式</h2>
-      </div>
-      <div class="grid">
-        <div class="card">
-          <span class="step">01</span>
-          <h3>建立 Repository</h3>
-          <p>到 GitHub 建立新專案，例如 <strong>gemini-teaching-site</strong>。</p>
+          <button id="exampleBtn" class="link-btn" type="button">載入「衛生紙」手動範例</button>
         </div>
-        <div class="card">
-          <span class="step">02</span>
-          <h3>上傳檔案</h3>
-          <p>將 <code>index.html</code>、<code>style.css</code>、<code>README.md</code> 上傳到專案根目錄。</p>
+      </header>
+
+      <div class="container form-wrap">
+        <section class="panel orange">
+          <h2>📖 情境導入</h2>
+          <label>1. 遇到什麼問題或情境？</label>
+          <textarea name="scenarioProblem" placeholder="例如：遇到某個不便、匱乏或需求……"></textarea>
+          <label>2. 你的轉念與實際行動？</label>
+          <textarea name="scenarioAction" placeholder="例如：我如何透過這個主題採取善意行動……"></textarea>
+          <label>3. 對此行動的溫暖期許</label>
+          <textarea name="scenarioWish" placeholder="例如：願這份行動幫助到需要的人……"></textarea>
+        </section>
+
+        <section class="panel purple">
+          <h2><span>1</span> 給予者的空性</h2>
+          <label>1-1 我的空性：清空匱乏</label>
+          <textarea name="step1_1"></textarea>
+          <label>1-2 擴大目標：連結世界</label>
+          <textarea name="step1_2"></textarea>
+        </section>
+
+        <section class="panel pink">
+          <h2><span>2</span> 給予的空性</h2>
+          <label>2-1 給予物的空性：回溯來源</label>
+          <textarea name="step2_1"></textarea>
+          <label>2-2 接收者身分：極致感恩</label>
+          <textarea name="step2_2"></textarea>
+          <label>2-3 給予者空性：匯聚力量</label>
+          <textarea name="step2_3"></textarea>
+          <label>2-4 接受者空性：讓愛擴散</label>
+          <textarea name="step2_4"></textarea>
+        </section>
+
+        <section class="panel indigo">
+          <h2><span>3</span> 接受者的空性</h2>
+          <label>3-1 發射給自己：精準鎖定</label>
+          <textarea name="step3_1"></textarea>
+          <label>3-2 發射給同伴：共享喜悅</label>
+          <textarea name="step3_2"></textarea>
+        </section>
+
+        <div class="center">
+          <button id="submitBtn" class="btn big" type="button">完成今日實踐 ✅</button>
         </div>
-        <div class="card">
-          <span class="step">03</span>
-          <h3>開啟 Pages</h3>
-          <p>進入 Settings → Pages，Source 選擇 <strong>Deploy from a branch</strong>，Branch 選 <strong>main / root</strong>。</p>
+      </div>
+    </section>
+
+    <section id="summaryView" class="page">
+      <div class="summary-shell">
+        <article id="practice-card" class="practice-card">
+          <div class="decoration sparkle">✨</div>
+          <div class="decoration heart">♡</div>
+
+          <div class="card-head">
+            <p id="dateText" class="date"></p>
+            <h1><span id="cardTheme">主題</span> 的奇蹟實踐</h1>
+            <p class="tag">日常三輪體空 242</p>
+          </div>
+
+          <section class="summary-box action-box">
+            <h3>☀️ 情境與行動</h3>
+            <p><b>問題：</b><span data-out="scenarioProblem"></span></p>
+            <p><b>行動：</b><span data-out="scenarioAction"></span></p>
+            <p><b>期許：</b><span data-out="scenarioWish"></span></p>
+          </section>
+
+          <div class="summary-grid">
+            <section class="mini purple-mini">
+              <h3>1 給予者空性</h3>
+              <h4>1-1 我的空性</h4><p data-out="step1_1"></p>
+              <h4>1-2 擴大目標</h4><p data-out="step1_2"></p>
+            </section>
+            <section class="mini pink-mini">
+              <h3>2 給予的空性</h3>
+              <h4>2-1 給予物空性</h4><p data-out="step2_1"></p>
+              <h4>2-2 接收者身分</h4><p data-out="step2_2"></p>
+              <h4>2-3 匯聚力量</h4><p data-out="step2_3"></p>
+              <h4>2-4 讓愛擴散</h4><p data-out="step2_4"></p>
+            </section>
+            <section class="mini indigo-mini">
+              <h3>3 接受者空性</h3>
+              <h4>3-1 發射給自己</h4><p data-out="step3_1"></p>
+              <h4>3-2 發射給同伴</h4><p data-out="step3_2"></p>
+            </section>
+          </div>
+
+          <section class="blessing">
+            <div>🌱</div>
+            <p>願這顆超級好種子，在你我與世界的中心發芽、開花。<br><strong>人人都能互相拉一把，世界因愛而圓滿！ ❤️</strong></p>
+          </section>
+        </article>
+
+        <div class="control-row">
+          <button id="imageBtn" class="btn success" type="button">產生圖片分享</button>
+          <button id="backBtn" class="btn white" type="button">返回修改</button>
+          <button id="resetBtn" class="btn white" type="button">重新填寫</button>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <p>© 2026 教學網站｜Powered by GitHub Pages</p>
-  </footer>
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>✨ 圖片已準備好！</h2>
+        <button id="closeModal" type="button">✕</button>
+      </div>
+      <div class="image-preview"><img id="previewImg" alt="三輪體空實踐日記圖片"></div>
+      <div class="modal-actions">
+        <button id="downloadBtn" class="btn primary" type="button">下載圖片</button>
+        <button id="shareBtn" class="btn success" type="button">直接分享</button>
+      </div>
+      <p class="hint center-text">若按鈕無反應，也可以對圖片長按或按右鍵儲存。</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
