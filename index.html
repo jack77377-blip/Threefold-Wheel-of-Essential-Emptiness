@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>教學網站</title>
+  <meta name="description" content="由 Gemini 分享內容整理而成的教學網站，可直接部署到 GitHub Pages。" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav">
+      <div class="brand">教學網站</div>
+      <a class="btn small" href="#content">開始閱讀</a>
+    </nav>
+    <section class="hero-inner">
+      <p class="eyebrow">GitHub Pages Ready</p>
+      <h1>Gemini 分享內容教學網站</h1>
+      <p class="lead">這是一份可直接上傳到 GitHub Pages 的清爽簡約版網站。請將 Gemini 分享頁面的內容貼到下方「主要內容」區塊，即可正式發布。</p>
+      <div class="actions">
+        <a class="btn" href="#content">查看內容</a>
+        <a class="btn ghost" href="#deploy">部署教學</a>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="notice">
+      <h2>讀取狀態</h2>
+      <p>目前 Gemini 分享連結只回傳登入頁面，無法直接擷取原文內容。因此我先製作完整網站架構與 GitHub Pages 部署檔案。你只要把 Gemini 內容複製後貼入 <code>index.html</code> 的主要內容區即可。</p>
+    </section>
+
+    <section id="content" class="section">
+      <div class="section-head">
+        <p class="eyebrow">Main Content</p>
+        <h2>主要內容</h2>
+      </div>
+
+      <article class="card article">
+        <h3>請在這裡貼上 Gemini 內容標題</h3>
+        <p>請將 Gemini 分享頁面的文字內容貼到這裡。建議依照「標題、重點摘要、步驟說明、補充提醒」分段，閱讀起來會很順。</p>
+
+        <h4>一、重點摘要</h4>
+        <ul>
+          <li>請貼上第一個重點。</li>
+          <li>請貼上第二個重點。</li>
+          <li>請貼上第三個重點。</li>
+        </ul>
+
+        <h4>二、詳細說明</h4>
+        <p>請貼上完整說明文字。若內容較長，可以拆成多個小標題，像收納盒一樣分類，找資料才不會像在抽屜裡撈耳機線。</p>
+
+        <h4>三、操作步驟</h4>
+        <ol>
+          <li>步驟一：請填入操作內容。</li>
+          <li>步驟二：請填入操作內容。</li>
+          <li>步驟三：請填入操作內容。</li>
+        </ol>
+      </article>
+    </section>
+
+    <section id="deploy" class="section alt">
+      <div class="section-head">
+        <p class="eyebrow">Deploy</p>
+        <h2>GitHub Pages 上架方式</h2>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <span class="step">01</span>
+          <h3>建立 Repository</h3>
+          <p>到 GitHub 建立新專案，例如 <strong>gemini-teaching-site</strong>。</p>
+        </div>
+        <div class="card">
+          <span class="step">02</span>
+          <h3>上傳檔案</h3>
+          <p>將 <code>index.html</code>、<code>style.css</code>、<code>README.md</code> 上傳到專案根目錄。</p>
+        </div>
+        <div class="card">
+          <span class="step">03</span>
+          <h3>開啟 Pages</h3>
+          <p>進入 Settings → Pages，Source 選擇 <strong>Deploy from a branch</strong>，Branch 選 <strong>main / root</strong>。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 教學網站｜Powered by GitHub Pages</p>
+  </footer>
+</body>
+</html>
