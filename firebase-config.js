@@ -6,12 +6,13 @@ export const WORKER_ENDPOINT = "";
 // 若要啟用，請到 Firebase 建立 Web App + Firestore，填入 config，並改 enabled:true
 export const FIREBASE_SETTINGS = {
   enabled: false,
-  config: {
-    apiKey: "",
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: ""
-  }
+   const firebaseConfig = {
+    apiKey: "AIzaSyB9kD7JGhteaKooEIRTuHZhYTHmb5NfDoo",
+    authDomain: "threefold-wheel.firebaseapp.com",
+    projectId: "threefold-wheel",
+    storageBucket: "threefold-wheel.firebasestorage.app",
+    messagingSenderId: "896143303726",
+    appId: "1:896143303726:web:2313b68c70186d3a75abbf",
+    measurementId: "G-3J8LXHZ5HF"
+  };
 };
